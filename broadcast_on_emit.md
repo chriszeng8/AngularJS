@@ -34,3 +34,38 @@ function secondCtrl($scope)
     $scope.$emit('someEvent', [1,2,3]);
 }
 ```
+
+
+
+
+How to communicate when both controller are child scope controllers (controller 1 and 2 in the diagram below)?
+
+```
+
+
+
+                 3
+           ------------
+           |          |
+         -----     ------
+         1   |     2    |
+      ---   ---   ---  ---
+      | |   | |   | |  | |
+```
+
+In file two.js
+```
+scope.$emit('messageTwo', someValue(s));
+```
+
+In file three.js - the uppermost node to all children nodes needed to communicate.
+```
+scope.$on('messageTwo', function( event, data ){
+  scope.$broadcast( 'messageTwo', data );
+});
+```
+In file one.js
+
+```
+scope.$on('messageTwo', someValue(s));
+```
